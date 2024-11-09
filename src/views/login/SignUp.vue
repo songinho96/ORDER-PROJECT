@@ -7,23 +7,73 @@
       </router-link>
       <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <!-- 탭 버튼 -->
+          <div class="flex justify-center space-x-4 mb-4">
+            <button
+              :class="activeTab === 'user' ? 'text-primary-600 font-bold' : 'text-gray-500'"
+              @click="activeTab = 'user'"
+              class="focus:outline-none"
+            >
+              사용자
+            </button>
+            <button
+              :class="activeTab === 'admin' ? 'text-primary-600 font-bold' : 'text-gray-500'"
+              @click="activeTab = 'admin'"
+              class="focus:outline-none"
+            >
+              관리자
+            </button>
+          </div>
+          
+          <!-- 제목 -->
           <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            계정 생성하기
+            {{ activeTab === 'user' ? '사용자 계정 생성하기' : '관리자 계정 생성하기' }}
           </h1>
+
+          <!-- 공통 회원가입 폼 -->
           <form class="space-y-4 md:space-y-6" @submit.prevent="handleSubmit">
-            <!-- 이름 입력 -->
+            <div>
+              <label for="id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">아이디</label>
+              <input 
+                type="text" 
+                name="id" 
+                id="id" 
+                v-model="id" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                placeholder="아이디를 입력하세요" 
+                required>
+            </div>
             <div>
               <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">이름</label>
-              <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="이름을 입력하세요" required>
+              <input 
+                type="text" 
+                name="name" 
+                id="name" 
+                v-model="name" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                placeholder="이름을 입력하세요" 
+                required>
             </div>
-            <!-- 생년월일 입력 -->
             <div>
               <label for="birthdate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">생년월일</label>
-              <input type="date" name="birthdate" id="birthdate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+              <input 
+                type="date" 
+                name="birthdate" 
+                id="birthdate" 
+                v-model="birthdate" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                required>
             </div>
             <div>
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">이메일</label>
-              <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required>
+              <input 
+                type="email" 
+                name="email" 
+                id="email" 
+                v-model="email" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                placeholder="name@company.com" 
+                required>
             </div>
             <div>
               <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">비밀번호</label>
@@ -50,7 +100,6 @@
                 pattern="^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$" 
                 title="비밀번호는 8~20자리로, 특수문자를 포함해야 합니다"
                 required>
-              <!-- 비밀번호 일치 확인 경고 메시지 -->
               <p v-if="password !== confirmPassword && confirmPassword" class="text-sm text-red-500">비밀번호가 일치하지 않습니다.</p>
             </div>
             <div class="flex items-start">
@@ -64,7 +113,9 @@
             <button 
               type="submit" 
               :disabled="password !== confirmPassword" 
-              class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:bg-gray-400">계정 생성하기</button>
+              class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:bg-gray-400">
+              {{ activeTab === 'user' ? '사용자 계정 생성하기' : '관리자 계정 생성하기' }}
+            </button>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               이미 계정이 있으신가요? <button @click="goToLogin" class="font-medium text-primary-600 hover:underline dark:text-primary-500">로그인 하기</button>
             </p>
@@ -78,17 +129,42 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { createShopSignApi } from '@/axios/sign/signUpApi'
 
 const router = useRouter()
-
-const password = ref('')
-const confirmPassword = ref('')
+const activeTab = ref('user') // 기본으로 사용자 탭 활성화
+const id = ref('') // 관리자 ID 입력
+const name = ref('') // 이름 입력
+const birthdate = ref('') // 생년월일 입력
+const email = ref('') // 이메일 입력
+const password = ref('') // 비밀번호 입력
+const confirmPassword = ref('') // 비밀번호 확인
 
 // 폼 제출 핸들러
-function handleSubmit() {
+async function handleSubmit() {
   if (password.value === confirmPassword.value) {
-    alert('계정이 성공적으로 생성되었습니다.')
-    // 폼 제출 로직 작성
+    if (activeTab.value === 'admin') {
+      try {
+        // API 호출
+        const response = await createShopSignApi(
+          id.value,
+          password.value,
+          name.value,
+          birthdate.value,
+          email.value
+        )
+
+        if (response && response.message === '관리자 회원가입이 완료되었습니다.') {
+          alert('관리자 계정이 성공적으로 생성되었습니다.')
+          router.push('/login') // 회원가입 후 로그인 페이지로 이동
+        }
+      } catch (error) {
+        alert('회원가입 중 오류가 발생했습니다.')
+        console.error(error)
+      }
+    } else {
+      alert('사용자 계정 생성은 별도 API를 통해 처리하세요.')
+    }
   } else {
     alert('비밀번호가 일치하지 않습니다.')
   }
